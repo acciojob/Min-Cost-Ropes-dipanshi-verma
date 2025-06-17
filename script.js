@@ -1,34 +1,38 @@
-// script.js
-function mincost(arr) {
-  if (arr.length === 0) return 0;
-  const minHeap = [...arr].sort((a, b) => a - b);
+function minCostRopes(arr) {
+  // Min heap implementation using array
+  arr.sort((a, b) => a - b);
   let cost = 0;
 
-  while (minHeap.length > 1) {
-    const first = minHeap.shift();
-    const second = minHeap.shift();
+  while (arr.length > 1) {
+    const first = arr.shift();
+    const second = arr.shift();
     const sum = first + second;
     cost += sum;
-    minHeap.push(sum);
-    minHeap.sort((a, b) => a - b);
+
+    // Insert sum back while maintaining sorted order
+    let inserted = false;
+    for (let i = 0; i < arr.length; i++) {
+      if (sum < arr[i]) {
+        arr.splice(i, 0, sum);
+        inserted = true;
+        break;
+      }
+    }
+    if (!inserted) arr.push(sum);
   }
 
   return cost;
 }
 
-function handleCalculate() {
+function calculateMinCost() {
   const input = document.getElementById("ropeInput").value;
-  if (!input) {
-    document.getElementById("result").innerText = "Please enter rope lengths.";
+  const lengths = input.split(',').map(num => parseInt(num.trim())).filter(n => !isNaN(n));
+
+  if (lengths.length < 2) {
+    document.getElementById("result").textContent = "Enter at least two rope lengths.";
     return;
   }
 
-  const arr = input.split(',').map(Number);
-  if (arr.some(isNaN)) {
-    document.getElementById("result").innerText = "Invalid input. Please enter numbers only.";
-    return;
-  }
-
-  const result = mincost(arr);
-  document.getElementById("result").innerText = `Minimum cost: ${result}`;
+  const result = minCostRopes(lengths);
+  document.getElementById("result").textContent = `Minimum cost to connect ropes: ${result}`;
 }
