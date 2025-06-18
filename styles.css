@@ -39,7 +39,7 @@ button:hover {
 }
 
 #result {
-  margin-top: 15px;
-  font-weight: bold;
+  margin-top: 20px;
   font-size: 18px;
+  color: #333;
 }
