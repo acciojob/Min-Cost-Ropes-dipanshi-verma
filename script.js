@@ -2,28 +2,30 @@ function calculateMinCost() {
   const input = document.getElementById("inputRopes").value;
   const arr = input.split(",").map(num => parseInt(num.trim())).filter(n => !isNaN(n));
 
+  const resultDiv = document.getElementById("result");
+
   if (arr.length < 2) {
-    document.getElementById("result").innerText = "Please enter at least two rope lengths.";
+    resultDiv.innerText = "❗ Please enter at least two rope lengths.";
+    resultDiv.style.color = "red";
     return;
   }
 
   const minCost = findMinCost(arr);
-  document.getElementById("result").innerText = `Minimum cost to connect all ropes: ${minCost}`;
+  resultDiv.innerText = `✅ Minimum cost to connect all ropes: ${minCost}`;
+  resultDiv.style.color = "green";
 }
 
 function findMinCost(arr) {
-  const heap = [...arr];
-  heap.sort((a, b) => a - b); // Min-heap simulation
-
+  let heap = [...arr].sort((a, b) => a - b);
   let totalCost = 0;
 
   while (heap.length > 1) {
-    let first = heap.shift();
-    let second = heap.shift();
-    let cost = first + second;
+    const first = heap.shift();
+    const second = heap.shift();
+    const cost = first + second;
     totalCost += cost;
 
-    // Insert the new rope back into the sorted position
+    // Insert the new rope and re-sort
     heap.push(cost);
     heap.sort((a, b) => a - b);
   }
